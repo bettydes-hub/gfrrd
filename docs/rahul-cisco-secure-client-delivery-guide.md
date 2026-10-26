@@ -2,6 +2,8 @@
 
 **Purpose:** Provide the Windows VPN installer so a PC user can connect to the company VPN the same way the phone already does with Cisco AnyConnect.
 
+**Context:** Cisco VPN already worked on Windows before. We do **not** need to search software share / Intune / SCCM. Just download (or reuse) the Cisco Windows client and send it.
+
 **VPN server:** `firewall.imagingak.com`  
 **Preferred connection URL:** `firewall.imagingak.com/wimr1507`  
 **Client to send:** Cisco Secure Client (includes AnyConnect VPN) for Windows
@@ -18,27 +20,16 @@ Send **one** Windows installer package for **Cisco Secure Client / AnyConnect VP
 
 Also acceptable:
 - A company zip that **contains** one of those MSI files
-- An IT-approved full Secure Client predeploy package, if that is what Imaging Associates normally uses
+- The same Cisco Windows VPN installer that was used previously when Windows VPN worked
 
 **Do not send:**
 - Random “AnyConnect” downloads from third-party websites
 - OpenConnect
-- Extra modules (Umbrella, AMP, ISE, NAM) unless your standard company package includes them on purpose
+- Extra modules (Umbrella, AMP, ISE, NAM) unless that is intentionally your standard package
 
 ---
 
-## Step 1 — Prefer an existing company copy
-
-1. Check whether Imaging Associates already has an approved Windows VPN client package in:
-   - software share / software center
-   - Intune / SCCM / endpoint management
-   - previous IT VPN deployment files
-2. If you find an approved **Cisco Secure Client** or **AnyConnect** Windows installer, skip to **Step 3** (how to send it).
-3. If you do not have one, continue to **Step 2**.
-
----
-
-## Step 2 — Download from Cisco (if no local package)
+## Step 1 — Download the Cisco Windows client
 
 1. Sign in to Cisco Software Download:  
    https://software.cisco.com  
@@ -53,19 +44,19 @@ Also acceptable:
    - **Or:** full Windows predeploy zip/MSI, then use the Core VPN installer inside it if separate modules are listed
 6. Save the file somewhere you can share securely.
 
-**If Cisco.com blocks the download:** the account may lack entitlement. Use an account that owns the AnyConnect/Secure Client license, or use your existing internal package from Step 1.
+**If Cisco.com blocks the download:** the account may lack entitlement. Use an account that owns the AnyConnect/Secure Client license, or reuse the previous Windows Cisco VPN installer if you still have that file.
 
 **Optional alternate source:**  
-If the VPN web portal is configured to offer client download:
+If the VPN web portal offers a client download:
 
 1. Open https://firewall.imagingak.com in a browser  
 2. Sign in with an account that can reach the download page  
 3. Look for **Download AnyConnect** / **Cisco Secure Client** for Windows  
-4. Download that package and continue to Step 3
+4. Download that package and continue to Step 2
 
 ---
 
-## Step 3 — Send the file securely
+## Step 2 — Send the file securely
 
 Send the installer to the PC user using a normal company channel:
 
@@ -90,7 +81,7 @@ You only need the VPN/Core VPN client. Contact me if Windows blocks the install.
 
 ---
 
-## Step 4 — Confirm they install the right thing
+## Step 3 — Confirm they install the right thing
 
 After they receive the file, they should:
 
@@ -107,7 +98,7 @@ After they receive the file, they should:
 ### If it fails
 | Symptom | What to check |
 |---|---|
-| Install blocked | Company policy / SmartScreen / need IT push via Intune-SCCM |
+| Install blocked | Company policy / SmartScreen |
 | Asks for a certificate (phone never did) | Confirm they used `/wimr1507`, not only the bare hostname |
 | Login rejected on PC but works on phone | Account restriction, MFA, or Windows posture policy — review on the ASA/IT side |
 | Wrong app installed | Confirm file was Cisco Secure Client / AnyConnect Core VPN, not OpenConnect |
@@ -116,7 +107,7 @@ After they receive the file, they should:
 
 ## Short checklist for Rahul
 
-- [ ] Locate or download Windows **Cisco Secure Client / AnyConnect Core VPN** MSI  
+- [ ] Download Windows **Cisco Secure Client / AnyConnect Core VPN** MSI (or reuse the previous Windows Cisco installer file)  
 - [ ] Confirm filename looks like `cisco-secure-client-win-…-predeploy-k9.msi` (or AnyConnect equivalent)  
 - [ ] Do **not** use a random internet mirror  
 - [ ] Send file via company email/SharePoint/Teams  
