@@ -139,3 +139,50 @@ Then compare PC vs phone systematically (still no random changes):
 | Are credentials wrong? | Unlikely — phone AnyConnect succeeds with the same account pattern. |
 | Will Cisco Secure Client on the PC fix it? | **Yes, expected** — same protocol family as the working phone client. |
 | Can OpenConnect work? | Likely yes **if** User-Agent is forced to start with `AnyConnect` and group URL `/wimr1507` is used. |
+
+## Windows: which Cisco app to install
+
+**Product name:** **Cisco Secure Client** (this is the current name; it still includes the **AnyConnect VPN** module). Older docs and IT emails may still say “AnyConnect”.
+
+**Do not** download random “AnyConnect” `.exe` / `.msi` from third-party websites. Use one of the sources below.
+
+### Where to get the installer (pick the first that works)
+
+1. **Company IT / Imaging Associates** (best)  
+   Ask for the Windows **Cisco Secure Client** (or AnyConnect) package they support for `firewall.imagingak.com`. Prefer their pre-approved build.
+
+2. **VPN web portal after login**  
+   In a browser, open `https://firewall.imagingak.com` (or `https://firewall.imagingak.com/wimr1507`), sign in with the same username/password as on your phone, then look for a **Download** / **AnyConnect** / **Secure Client** link.  
+   Note: the portal does **not** expose a public installer without authentication.
+
+3. **Cisco Software Download** (only if you or IT have a Cisco.com account with entitlement)  
+   - Product: **Cisco Secure Client** (including AnyConnect), release **5.x**  
+   - Windows file pattern: `cisco-secure-client-win-<version>-core-vpn-predeploy-k9.msi`  
+     (or the larger `…-predeploy-k9.zip` / `…-predeploy-k9.msi` package)  
+   - Official catalog: https://software.cisco.com/download/home/286330811  
+
+You usually only need the **Core VPN** module. Skip Umbrella / AMP / ISE / NAM modules unless IT tells you to install them.
+
+### Install steps on Windows 11
+
+1. **Uninstall OpenConnect VPN for Windows** (Settings → Apps). Reboot if prompted. This avoids conflicting virtual adapters.
+2. Run the Cisco `.msi` as Administrator. Accept defaults unless IT gave a custom package.
+3. After install, start **Cisco Secure Client** (Start menu). Older installs may still show **Cisco AnyConnect Secure Mobility Client**.
+4. In the VPN box, enter exactly one of:
+   - `firewall.imagingak.com/wimr1507` (preferred — same group alias OpenConnect used)
+   - or `firewall.imagingak.com` if IT says that is enough
+5. Click **Connect**, enter the same **username** and **password** as on your phone.
+6. Allow any Windows Firewall / driver prompts for the Cisco adapter.
+
+### Success / failure checks
+
+- **Success:** status becomes Connected; corporate resources load.
+- **If it asks for a certificate** and your phone never did: you used the wrong group URL — retry with `/wimr1507`.
+- **If credentials fail on PC but work on phone:** stop and ask IT (account may be device-restricted, or MFA/posture may apply only to Windows).
+- **If install is blocked:** corporate PC policy may require IT to push the client via software center / Intune / SCCM.
+
+### What not to do
+
+- Do not keep OpenConnect and Cisco Secure Client both trying to own the VPN at the same time.
+- Do not import custom root certificates for this server (DigiCert cert is already valid).
+- Do not change DNS or hosts-file entries for `firewall.imagingak.com`.
